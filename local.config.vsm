@@ -1,0 +1,13 @@
+# Ideally define at least these 5 to match your environment
+# The first 3 are required.
+# See README for other variables which can be set.
+#
+# Note: SCRATCH_DEV >will< get overwritten!
+#
+# These values correspond to the naming scheme put in place by vsm-config
+
+export FSTYP=samfs
+export TEST_DEV=Qfs3
+export TEST_DIR=/mnt/qfs3
+export SCRATCH_DEV=Qfs4
+export SCRATCH_MNT=/mnt/qfs4
