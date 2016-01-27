@@ -149,6 +149,9 @@ case "$FSTYP" in
 	 ;;
     overlay)
 	 ;;
+    samfs)
+	 [ "$MKFS_SAMFS_PROG" = "" ] && _fatal "mkfs.vsm not found"
+	 ;;
     reiser4)
 	 [ "$MKFS_REISER4_PROG" = "" ] && _fatal "mkfs.reiser4 not found"
 	 ;;
@@ -647,6 +650,9 @@ _test_mkfs()
     overlay)
 	# do nothing for overlay
 	;;
+    samfs)
+	# do nothing for samfs
+	;;
     udf)
         $MKFS_UDF_PROG $MKFS_OPTIONS $* $TEST_DEV > /dev/null
 	;;
@@ -744,6 +750,9 @@ _scratch_mkfs()
 	;;
     f2fs)
         $MKFS_F2FS_PROG $MKFS_OPTIONS $* $SCRATCH_DEV > /dev/null
+	;;
+    samfs)
+        yes | $MKFS_SAMFS_PROG $MKFS_OPTIONS $* $SCRATCH_DEV > /dev/null
 	;;
     *)
 	yes | $MKFS_PROG -t $FSTYP -- $MKFS_OPTIONS $* $SCRATCH_DEV
@@ -1241,6 +1250,12 @@ _require_scratch_nocheck()
 			_notrun "this test requires a valid \$SCRATCH_MNT"
 		fi
 		;;
+	samfs)
+		if [ -z "$SCRATCH_DEV" -o ! -d "$SCRATCH_MNT" ];
+		then
+		    _notrun "this test requires a valid \$SCRATCH_MNT and unique $SCRATCH_DEV"
+		fi
+		;;
 	tmpfs)
 		if [ -z "$SCRATCH_DEV" -o ! -d "$SCRATCH_MNT" ];
 		then
@@ -1321,6 +1336,12 @@ _require_test()
 		fi
 		if [ ! -d "$TEST_DIR" ]; then
 			_notrun "this test requires a valid \$TEST_DIR"
+		fi
+		;;
+	samfs)
+		if [ -z "$TEST_DEV" -o -z "$TEST_DIR" ];
+		then
+		    _notrun "this test requires a valid \$TEST_DIR and \$TEST_DEV"
 		fi
 		;;
 	tmpfs)
